@@ -1,7 +1,8 @@
 # FE-knowledge
 前端面试知识点/常见问题
 
-#React
+# React
+
 + **setState更新什么时候是同步更新，什么时候是异步更新？**
 > 由React控制的事件处理程序，以及生命周期函数内调用setState不会同步更新state;
 > 
