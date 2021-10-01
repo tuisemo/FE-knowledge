@@ -76,3 +76,86 @@
 > 
 > post产生两个TCP数据包，headr先发送，服务器响应100状态码后继续，发送data，服务器响应200状态码后返回数据。
 > 
+
+# 设计模式
+
++ **责任链模式**
+
+我们可以先看一个开发中时长会遇到的场景，一份数据可能需要经手很多环节的业务处理，最常见的代码编写方式大概会是下面这样
+```javascript
+function A() {
+  console.log('A业务处理')
+  B()
+}
+function B() {
+  console.log('B业务处理')
+  C()
+}
+function C() {
+  console.log('C业务处理')
+  D()
+}
+function D() {
+  console.log('D业务处理')
+  console.log('end')
+}
+```
+上面的代码可以实现基本的业务需求，但并不优雅，一旦我们需要在B与C中间再添加一个业务逻辑，那我们就需要去修改B函数里调用C方法的代码。
+
+所以，责任链设计模式就可以用于优化这样的编码场景
+
+首先，我们先创建一个责任链的工具类
+```javascript
+class Chain {
+  constructor(handler) {
+    this.handler = handler
+  }
+  // 设置链式关系
+  setNextChain(nextChain) {
+    this.nextChain = nextChain
+  }
+  // 执行当前业务
+  handleExec() {
+    let result = this.handler.apply(this, arguments)
+    if (result === 'next') {
+      this.nextChain.handleExec.apply(this, arguments)
+    }
+  }
+}
+```
+根据上述类的实现方式，我们修改一下原先的ABCD四个业务方法
+```javascript
+function A() {
+  console.log('A业务处理')
+  return 'next'
+}
+function B() {
+  console.log('B业务处理')
+  return 'next'
+}
+function C() {
+  console.log('C业务处理')
+  return 'next'
+}
+function D() {
+  console.log('D业务处理')
+  console.log('end')
+}
+```
+接下来我们就可以通过创建责任链实例，将业务调用链，连接起来。
+```javascript
+// 创建调用链节点
+const chainA = new Chain(A)
+const chainB = new Chain(B)
+const chainC = new Chain(C)
+const chainD = new Chain(D)
+
+// 关联调用顺序关系
+chainA.setNextChain(chainB)
+chainB.setNextChain(chainC)
+chainC.setNextChain(chainD)
+
+// 执行第一个调用节点
+chainA.handleExec()
+```
+根据上面的简单代码实现，哪怕需要改变ABCD的调用顺序，也不需要去具体函数里面调整执行调用了，在我们维护的责任链里更新链式关系即可。
