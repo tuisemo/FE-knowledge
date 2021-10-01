@@ -159,3 +159,43 @@ chainC.setNextChain(chainD)
 chainA.handleExec()
 ```
 根据上面的简单代码实现，哪怕需要改变ABCD的调用顺序，也不需要去具体函数里面调整执行调用了，在我们维护的责任链里更新链式关系即可。
+
++ **单例模式**
+
+传统单例
+```javascript
+// 传统单例
+var Single = function () {
+  this.instance = null
+}
+Single.prototype.getInstance = function () {
+  if (!this.instance) {
+    this.instance = new Single()
+  }
+  return this.instance
+}
+
+var fnA = Single.getInstance()
+var fnB = Single.getInstance()
+```
+
+闭包函数实现单例
+```javascript
+// 闭包函数单例
+var Single = function () {
+  // todo
+}
+var SingleProxy = (function () {
+  // 匿名自执行函数
+  var instance
+  return function () {
+    if (!instance) {
+      instance = new Single()
+      return instance
+    }
+    return instance
+  }
+})()
+var fnA = new SingleProxy()
+var fnB = new SingleProxy()
+```
