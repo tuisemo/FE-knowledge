@@ -53,7 +53,55 @@
 > 
 > ***如果我们希望在某些操作发生之后再更新dom，那么应该将这个操作放在useLayoutEffect***
 
++ **useMemo的实现原理/手写一个简易版的useMemo**
 
+函数返回一个值，支持缓存，减少不需要的更新
+```javascript
+let hookStates = []
+let hookIndex = 0
+function useMemo(callback, dependencies) {
+  if (hookStates[hookIndex]) {
+    let [lastMemo, lastDependencies] = hookStates[hookIndex]
+    // 判断前后的依赖项，数值是否变化
+    let same = dependencies.every(
+      (item, index) => item === lastDependencies[index]
+    )
+    if (same) {
+      // 依赖未变化
+      hookIndex++
+      return lastMemo
+    }
+  }
+  const nextValue = callback()
+  // 首次渲染或者依赖项存在数值变化
+  hookStates[hookIndex++] = [nextValue, dependencies]
+  return nextValue
+}
+```
++ **useCallback的实现原理/手写一个简易版的useCallback**
+
+其实useCallback的实现方式与useMemo一致，不同的只是一个返回的缓存的值，一个返回的是缓存的函数
+```javascript
+let hookStates = []
+let hookIndex = 0
+function useCallback(callback, dependencies) {
+  if (hookStates[hookIndex]) {
+    let [lastCallback, lastDependencies] = hookStates[hookIndex]
+    // 判断前后的依赖项，数值是否变化
+    let same = dependencies.every(
+      (item, index) => item === lastDependencies[index]
+    )
+    if (same) {
+      // 依赖未变化
+      hookIndex++
+      return lastCallback
+    }
+  }
+  // 首次渲染或者依赖项存在数值变化
+  hookStates[hookIndex++] = [callback, dependencies]
+  return callback
+}
+```
 
 # 网络
 
