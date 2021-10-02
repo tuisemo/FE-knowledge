@@ -31,6 +31,12 @@
 参照资料：
 [https://github.com/mqyqingfeng/Blog/issues/2](https://github.com/mqyqingfeng/Blog/issues/2)
 
++ **Redux核心思想**
+> **唯一数据源（state）**：数据来源均直接或者间接地来自于state
+> 
+> **数据源（state）只读**：不可直接修改state数据，而是基于原state更新返回一份新的数据作为数据源
+> 
+> **通过纯函数（reducer）改变数据源**：pure function：无其他api调用，无异步操作
 
 # React
 
