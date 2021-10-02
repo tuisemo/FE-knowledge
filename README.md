@@ -59,6 +59,32 @@
 > 
 > ***如果我们希望在某些操作发生之后再更新dom，那么应该将这个操作放在useLayoutEffect***
 
++ **useState的简易实现**
+
+useState是内部是利用数组来存储值的，而且是利用数组的下标来区分不同的值得。如果把useState用在条件语句中，数组的下标就会产生混乱。
+
+```javascript
+const CreateUseState = () => {
+  const state = []
+  let index = 0
+  return (initialValue) => {
+    state[index] = state[index] || initialValue
+    const currentIndex = index
+    const dispatch = (newState) => {
+      state[currentIndex] = newState
+      //
+      index = 0
+      // 触发react执行重新更新渲染的方法
+      render()
+    }
+    index++
+    return [state[currentIndex], dispatch]
+  }
+}
+const useState = CreateUseState()
+const [data, setData] = useState(0)
+```
+
 + **useMemo的实现原理/手写一个简易版的useMemo**
 
 函数返回一个值，支持缓存，减少不需要的更新
@@ -84,6 +110,7 @@ function useMemo(callback, dependencies) {
   return nextValue
 }
 ```
+
 + **useCallback的实现原理/手写一个简易版的useCallback**
 
 其实useCallback的实现方式与useMemo一致，不同的只是一个返回的缓存的值，一个返回的是缓存的函数
