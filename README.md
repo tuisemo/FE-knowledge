@@ -156,7 +156,11 @@ function useCallback(callback, dependencies) {
 > post请求相对get更安全，因为参数不会保存在浏览器里或者web服务器日志中
 > 
 > post产生两个TCP数据包，headr先发送，服务器响应100状态码后继续，发送data，服务器响应200状态码后返回数据。
-> 
+
++ **webSocket与传统的http有什么优势**
+> - 客户端与服务端只需要一个TCP连接，比http长轮询使用更少的连接
+> - webSocket服务端可以推送数据到客户端
+> - 更轻量的协议头，减少数据传输量
 
 # 设计模式
 
