@@ -183,6 +183,10 @@ class Dep {
 > 组件会new一个自己的watcher对象，此时watcher会立即调用组件的render函数去生成虚拟dom。在调用render的时候，就会需要用到data的属性值，此时会触发getter函数，将当前的watcher函数注册进sub里。
 > 2. 当data属性发生改变之后，就会遍历sub里所有的watcher对象，通知他们去重新渲染组件。
 
++ **Vue中的`vm.$set(target,key,value)`这个api都作了些什么？**
+> + 当target为数组时，直接调用数组方法splice实现
+> + 如果target是对象，会先判断属性是否存在，对象是否是响应式
+> 	- 最终如果要对属性进行响应式处理，则是用过调用`defineReactive`方法进行响应式处理 
 
 # 网络
 
