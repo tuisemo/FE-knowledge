@@ -188,6 +188,24 @@ class Dep {
 > + 如果target是对象，会先判断属性是否存在，对象是否是响应式
 > 	- 最终如果要对属性进行响应式处理，则是用过调用`defineReactive`方法进行响应式处理 
 
++ **怎么给Vue定义全局方法？**
+> + 将方法挂载在Vue.prototype上面（原型链方式实现）
+> + 利用全局混入（mixin）
+> ```javascript
+> // 在项目入口的main.js里配置
+> import Vue from 'vue'
+> import mixin from '@/mixin'
+> Vue.mixin(mixin)
+> ```
+> + 使用Plugin方式（本质和原型链一致）
+> ```javascript
+> // 在项目入口的main.js里配置
+> import Vue from 'vue'
+> import plugin from '@/plugin'
+> Vue.use(plugin)
+> ```
+> + 全局函数
+
 # 网络
 
 + **get请求和post请求对比；为什么post比get请求安全一些?**
