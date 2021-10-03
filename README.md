@@ -136,6 +136,54 @@ function useCallback(callback, dependencies) {
 }
 ```
 
+# Vue
+
++ **谈谈Vue2.0响应式原理**
+
+```javascript
+function defineReactive(obj: Object, key: string, ...) {
+	const dep = new Dep()
+
+	Object.defineProperty(obj, key, {
+		enumerable: true,
+		configurable: true,
+		get: function reactiveGetter() {
+        ....
+			dep.depend()
+        return value
+        ....
+      },
+		set: function reactiveSetter(newVal) {
+        ...
+		val = newVal
+        dep.notify()
+        ...
+      }
+    })
+  }
+
+class Dep {
+	static target: ?Watcher;
+	subs: Array<Watcher>;
+
+	depend() {
+		if (Dep.target) {
+			Dep.target.addDep(this)
+		}
+	}
+
+	notify() {
+		const subs = this.subs.slice()
+		for (let i = 0, l = subs.length; i < l; i++) {
+			subs[i].update()
+		}
+	}
+```
+> 1. 组件初始化的时候，会先给data的每一个属性都注册getter、setter，也就是reactive化（此处通过Object.defineProperty()实现）
+> 组件会new一个自己的watcher对象，此时watcher会立即调用组件的render函数去生成虚拟dom。在调用render的时候，就会需要用到data的属性值，此时会触发getter函数，将当前的watcher函数注册进sub里。
+> 2. 当data属性发生改变之后，就会遍历sub里所有的watcher对象，通知他们去重新渲染组件。
+
+
 # 网络
 
 + **get请求和post请求对比；为什么post比get请求安全一些?**
