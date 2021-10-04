@@ -140,6 +140,11 @@ function useCallback(callback, dependencies) {
 
 + **谈谈Vue2.0响应式原理**
 
+借用一下掘金上看到的一张流程图：
+
+![图片来源 https://juejin.cn/post/6844904096382582797](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/18/170edf7e0a7291d7~tplv-t2oaga2asx-watermark.awebp)
+
+(图片来源 https://juejin.cn/post/6844904096382582797 若侵删)
 ```javascript
 function defineReactive(obj: Object, key: string, ...) {
 	const dep = new Dep()
