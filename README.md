@@ -38,12 +38,49 @@
 参照资料：
 [https://github.com/mqyqingfeng/Blog/issues/2](https://github.com/mqyqingfeng/Blog/issues/2)
 
++ **前端错误监控**
+> **前端常见的错误类型**
+> 
+> 语法错误：
+> - SyntaxError（解析时发生语法错误）
+> - TypeError（数值类型错误）
+> - ReferenceError（引用未声明的变量）
+> 
+> 网络错误：
+> - ResourceError（资源加载错误）
+> - HttpError（http请求错误）
+> 
+> **如何采集错误**
+> ```javascript
+> // 常规运行时错误、异步错误
+> window.onerror = function(message, source, lineno, colno, error) {
+>  console.log('捕获到异常：',{message, source, lineno, colno, error});
+> }
+> // 图片、script、css加载错误，都能被捕获
+> <script>
+>   window.addEventListener('error', (error) => {
+>      console.log('捕获到异常：', error);
+>   }, true)
+> </script>
+> ```
+> 
+> **为什么选择使用new Image()实现数据上报？**
+> ```javascript
+> (new Image()).src="http://post.error.com?data=xxx"
+> ```
+> - 可以进行跨域
+> - 不会携带cookie
+> - 不需要等待服务器返回数据
+
+
+
 + **Redux核心思想**
 > **唯一数据源（state）**：数据来源均直接或者间接地来自于state
 > 
 > **数据源（state）只读**：不可直接修改state数据，而是基于原state更新返回一份新的数据作为数据源
 > 
 > **通过纯函数（reducer）改变数据源**：pure function：无其他api调用，无异步操作
+
 
 # React
 
