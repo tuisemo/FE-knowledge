@@ -38,6 +38,64 @@
 参照资料：
 [https://github.com/mqyqingfeng/Blog/issues/2](https://github.com/mqyqingfeng/Blog/issues/2)
 
++ **手动实现apply、call、bind**
+> 如何显式地绑定this？
+> 
+> **如果调用者函数，被某一个对象所拥有，那么该函数在调用时，内部的this指向该对象。**
+> 
+> 手写实现apply：
+>
+> ```javascript
+> 
+> Function.prototype.myApply = function (context, args) {
+>     //这里默认不传就是给window,也可以用es6给参数设置默认参数
+>     var cxt = context || window
+>     args = args ? args : []
+>     cxt.fn = this
+>     //通过隐式绑定的方式调用函数
+>     const result = cxt.fn(...args)
+>     //删除添加的属性
+>     delete cxt.fn
+>     //返回函数调用的返回值
+>     return result
+> }
+> 
+> ```
+>
+> 手写实现call：
+>
+> ```javascript
+> //传递参数从一个数组变成逐个传参了,不用...扩展运算符的也可以用arguments代替
+> Function.prototype.myCall = function (context, ...args) {
+>     //这里默认不传就是给window,也可以用es6给参数设置默认参数
+>     var cxt = context || window
+>     args = args ? args : []
+>     cxt.fn = this
+>     //通过隐式绑定的方式调用函数
+>     const result = cxt.fn(...args)
+>     //删除添加的属性
+>     delete cxt.fn
+>     //返回函数调用的返回值
+>     return result
+> }
+> ```
+>
+> 手写实现bind：
+>
+> ```javascript
+> Function.prototype.myBind = function (context, ...args) {
+>     const fn = this
+>     args = args ? args : []
+>     return function newFn(...newFnArgs) {
+>         if (this instanceof newFn) {
+>             return new fn(...args, ...newFnArgs)
+>         }
+>         return fn.apply(context, [...args,...newFnArgs])
+>     }
+> }
+> ```
+>
+
 + **async函数**
 > 无论async函数有无await操作，其总是返回一个promise。
 > 1. 没有显示return，相当于return Promise.resolve(undefined)
