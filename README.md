@@ -38,6 +38,14 @@
 参照资料：
 [https://github.com/mqyqingfeng/Blog/issues/2](https://github.com/mqyqingfeng/Blog/issues/2)
 
++ **async函数**
+> 无论async函数有无await操作，其总是返回一个promise。
+> 1. 没有显示return，相当于return Promise.resolve(undefined)
+> 2. return非Promise的数据data，相当于return Promise.resolve(data)
+> 3. return Promise,会得到Promise对象本身
+> 
+> async函数总是返回Promise，因此，其后面可以直接调用then方法，函数内部return返回的值，会成为then回调函数的参数；函数内部抛出的错误，会被then的第二个函数或catch方法捕获到；
+
 + **前端错误监控**
 > **前端常见的错误类型**
 > 
