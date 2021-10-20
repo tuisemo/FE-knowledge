@@ -96,6 +96,10 @@
 > ```
 >
 
++ **ES6的拓展符（...）和Object.assign()有何差异？**
+> 拓展运算符和 Object.assign() 的表现基本是一致的
+> 不过，Object.assign() 使用源对象的 [[Get]] 和目标对象的 [[Set]] ，会调用相关 getter 和 setter。因此，它分配属性，而不仅仅是复制或定义新的属性。而拓展运算符不会。
+
 + **async函数**
 > 无论async函数有无await操作，其总是返回一个promise。
 > 1. 没有显示return，相当于return Promise.resolve(undefined)
